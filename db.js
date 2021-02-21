@@ -113,19 +113,22 @@ module.exports.deleteTestUser = () => {
 
 //CHAT FUNCTIONS
 module.exports.createChat = (chatData) => {
+    //Convert id strings to objectIds
     for (let i = 0; i < chatData.users; i++) {
         chatData.users[i] = mongoose.Types.ObjectId(chatData.users[i]);
     }
+
     return new Promise( (resolve, reject) => {
+        //Create new chat object
         const chat = new Chat(chatData);
         chat.save( (err) => {
             if (err) {
                 reject(err);
             } else {
+
+                //Add chat reference to the user objects
                 let saveState = true;
-                console.log(chat);
                 for (let i = 0; i < chat.users.length; i++) {
-                    console.log(chat.users[i]);
                     User.findById(mongoose.Types.ObjectId(chat.users[i]), (err, foundUser) => {
                         if (!err) {
                             foundUser.chats.push(chat._id);
