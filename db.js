@@ -237,3 +237,11 @@ module.exports.updateTweet = (tweetId, editData) => {
             })
     })
 }
+
+module.exports.deleteTweet = (tweetId) => {
+    return new Promise( (resolve, reject) => {
+        Tweet.findByIdAndDelete(mongoose.Types.ObjectId(tweetId), (err) => {
+            err ? reject(err) : resolve("deleted tweet");
+        })
+    })
+}
